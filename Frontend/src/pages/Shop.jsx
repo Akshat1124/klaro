@@ -22,6 +22,9 @@ const Shop = () => {
     category: 'all',
     sortBy: 'featured'
   });
+  // Add pending state for filters and search
+  const [pendingFilters, setPendingFilters] = useState(filters);
+  const [pendingSearchQuery, setPendingSearchQuery] = useState(searchQuery);
   const [showChatbot, setShowChatbot] = useState(true);
   const [highlightedProducts, setHighlightedProducts] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
@@ -32,6 +35,7 @@ const Shop = () => {
   const [trendingProducts, setTrendingProducts] = useState([]);
   const [viewStartTime, setViewStartTime] = useState(null);
 
+  // Update filteredProducts to use filters/searchQuery (not pending)
   const filteredProducts = products
     .filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -112,6 +116,13 @@ const Shop = () => {
       sortBy: 'featured'
     });
     setSearchQuery('');
+    setPendingFilters({
+      priceRange: 'all',
+      size: 'all',
+      category: 'all',
+      sortBy: 'featured'
+    });
+    setPendingSearchQuery('');
     setShowOnlyHighlighted(false);
     setHighlightedProducts([]);
   };
@@ -265,10 +276,10 @@ const Shop = () => {
             >
               <input
                 type="text"
-                placeholder="Search products, categories, or tags..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-white/50 backdrop-blur-sm"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={pendingSearchQuery}
+                onChange={e => setPendingSearchQuery(e.target.value)}
+                placeholder="Search products..."
+                className="w-full rounded-md border-gray-200 shadow-sm focus:border-blue-400 focus:ring-blue-400 bg-white/50 backdrop-blur-sm px-4 py-2 mb-4"
               />
               <FiSearch className="absolute left-3 top-3 text-gray-400" />
             </motion.div>
@@ -334,8 +345,8 @@ const Shop = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
                     <select
                       className="w-full rounded-md border-gray-200 shadow-sm focus:border-blue-400 focus:ring-blue-400 bg-white/50 backdrop-blur-sm"
-                      value={filters.sortBy}
-                      onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
+                      value={pendingFilters.sortBy}
+                      onChange={(e) => setPendingFilters(f => ({ ...f, sortBy: e.target.value }))}
                     >
                       <option value="featured">Featured</option>
                       <option value="price-low">Price: Low to High</option>
@@ -348,8 +359,8 @@ const Shop = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
                     <select
                       className="w-full rounded-md border-gray-200 shadow-sm focus:border-blue-400 focus:ring-blue-400 bg-white/50 backdrop-blur-sm"
-                      value={filters.priceRange}
-                      onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
+                      value={pendingFilters.priceRange}
+                      onChange={(e) => setPendingFilters(f => ({ ...f, priceRange: e.target.value }))}
                     >
                       <option value="all">All Prices</option>
                       <option value="under50">Under $50</option>
@@ -362,8 +373,8 @@ const Shop = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Size</label>
                     <select
                       className="w-full rounded-md border-gray-200 shadow-sm focus:border-blue-400 focus:ring-blue-400 bg-white/50 backdrop-blur-sm"
-                      value={filters.size}
-                      onChange={(e) => setFilters({ ...filters, size: e.target.value })}
+                      value={pendingFilters.size}
+                      onChange={(e) => setPendingFilters(f => ({ ...f, size: e.target.value }))}
                     >
                       <option value="all">All Sizes</option>
                       <option value="S">Small</option>
@@ -376,8 +387,8 @@ const Shop = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                     <select
                       className="w-full rounded-md border-gray-200 shadow-sm focus:border-blue-400 focus:ring-blue-400 bg-white/50 backdrop-blur-sm"
-                      value={filters.category}
-                      onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+                      value={pendingFilters.category}
+                      onChange={(e) => setPendingFilters(f => ({ ...f, category: e.target.value }))}
                     >
                       <option value="all">All Categories ({products.length})</option>
                       <option value="Dresses">Dresses ({getProductCount('Dresses')})</option>
@@ -400,6 +411,20 @@ const Shop = () => {
                       </label>
                     </div>
                   )}
+                </div>
+                <div className="mt-6 flex justify-end">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      setFilters(pendingFilters);
+                      setSearchQuery(pendingSearchQuery);
+                    }}
+                    className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    disabled={JSON.stringify(filters) === JSON.stringify(pendingFilters) && searchQuery === pendingSearchQuery}
+                  >
+                    Apply Filters
+                  </motion.button>
                 </div>
               </motion.div>
             )}

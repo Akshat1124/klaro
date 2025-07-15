@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import ScrollZoomVideo from "../components/scrollZoom";
 import Footer from "../components/footer";
+import { products } from '../data/products';
 
 
 const containerVariants = {
@@ -30,97 +31,11 @@ const itemVariants = {
 };
 
 
-const trendingProducts = [
-  {
-    id: 1,
-    name: "Floral Summer Dress",
-    price: "$89.99",
-    image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    tag: "New",
-    discount: "20% OFF"
-  },
-  {
-    id: 2,
-    name: "Casual Blouse",
-    price: "$49.99",
-    image: "https://images.unsplash.com/photo-1554568218-0f1715e72254?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    tag: "Bestseller"
-  },
-  {
-    id: 3,
-    name: "High-Waisted Jeans",
-    price: "$79.99",
-    image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    tag: "Limited"
-  },
-  {
-    id: 4,
-    name: "Evening Gown",
-    price: "$199.99",
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    tag: "Premium"
-  },
-  {
-    id: 5,
-    name: "Silk Wrap Dress",
-    price: "$129.99",
-    image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    tag: "New"
-  },
-  {
-    id: 6,
-    name: "Pleated Midi Skirt",
-    price: "$59.99",
-    image: "https://images.unsplash.com/photo-1577900232427-18219b9166a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    tag: "Premium"
-  },
-  {
-    id: 7,
-    name: "Off-Shoulder Blouse",
-    price: "$39.99",
-    image: "https://images.unsplash.com/photo-1562572159-4efc207f5aff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    tag: "Bestseller"
-  },
-  {
-    id: 8,
-    name: "Maxi Sundress",
-    price: "$69.99",
-    image: "https://imgs.search.brave.com/rERpjookOnjTqBAqCD-2ZDnV9jD7BJnImfc-l8H9DnY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NjFKNDNvZjJKMkwu/anBn",
-    tag: "New"
-  }
-];
+const trendingProducts = products.slice(0, 8);
 
-const mensFeaturedProducts = [
-  {
-    id: 1,
-    name: "Classic Fit Shirt",
-    price: "$59.99",
-    image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    tag: "New",
-    discount: "15% OFF"
-  },
-  {
-    id: 2,
-    name: "Slim Fit Jeans",
-    price: "$79.99",
-    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    tag: "Bestseller"
-  },
-  {
-    id: 3,
-    name: "Casual Blazer",
-    price: "$129.99",
-    image: "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    tag: "Premium"
-  },
-  {
-    id: 4,
-    name: "Leather Jacket",
-    price: "$199.99",
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-    tag: "Limited"
-  }
-];
+const mensFeaturedProducts = products.filter(
+  p => ['Tops', 'Bottoms', 'Outerwear'].includes(p.category) && ['M', 'L'].includes(p.size)
+).slice(0, 4);
 
 const features = [
   {
